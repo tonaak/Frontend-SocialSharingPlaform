@@ -2,7 +2,7 @@ const Input = (props) => {
 
     let inputClassName = 'form-control';
     if(props.hasError !== undefined) {
-        inputClassName += props.hasError ? ' is-invalid' : 'is-valid';
+        inputClassName += props.hasError ? ' is-invalid' : ' is-valid';
     } 
 
     return (
