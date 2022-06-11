@@ -5,19 +5,9 @@ import reportWebVitals from './reportWebVitals';
 import { HashRouter } from 'react-router-dom';
 import App from './containers/App';
 import { Provider } from 'react-redux';
-import { legacy_createStore as createStore } from 'redux';
-import authReducer from './redux/authReducer';
+import configureStore from './redux/configureStore';
 
-const loggedInState = {
-  id: 1,
-  username: 'user1',
-  displayName: 'display1',
-  image: 'profile.png',
-  password: 'P4ssword',
-  isLoggedIn: true
-};
-
-const store = createStore(authReducer, loggedInState);
+const store = configureStore();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
