@@ -4,12 +4,28 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { HashRouter } from 'react-router-dom';
 import App from './containers/App';
+import { Provider } from 'react-redux';
+import { legacy_createStore as createStore } from 'redux';
+import authReducer from './redux/authReducer';
+
+const loggedInState = {
+  id: 1,
+  username: 'user1',
+  displayName: 'display1',
+  image: 'profile.png',
+  password: 'P4ssword',
+  isLoggedIn: true
+};
+
+const store = createStore(authReducer, loggedInState);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <HashRouter>  
+  <Provider store={store}>
+    <HashRouter>
       <App />
     </HashRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
