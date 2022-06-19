@@ -12,6 +12,7 @@ class UserPage extends Component {
     originalDisplayName: undefined,
     pendingUpdateCall: false,
     image: undefined,
+    errors: {},
   };
   componentDidMount() {
     this.loadUser();
@@ -52,6 +53,7 @@ class UserPage extends Component {
       originalDisplayName: undefined,
       inEditMode: false,
       image: undefined,
+      errors: {},
     });
   };
 
@@ -76,8 +78,13 @@ class UserPage extends Component {
         });
       })
       .catch((error) => {
+        let errors = {};
+        if (error.response.data.validationErrors) {
+          errors = error.response.data.validationErrors;
+        }
         this.setState({
           pendingUpdateCall: false,
+          errors,
         });
       });
   };
@@ -89,18 +96,23 @@ class UserPage extends Component {
       originalDisplayName = user.displayName;
     }
     user.displayName = event.target.value;
-    this.setState({ user, originalDisplayName });
+    const errors = { ...this.state.errors };
+    errors.displayName = undefined;
+    this.setState({ user, originalDisplayName, errors });
   };
 
   onFileSelect = (event) => {
     if (event.target.files.length === 0) {
       return;
     }
+    const errors = { ...this.state.errors };
+    errors.image = undefined;
     const file = event.target.files[0];
     let reader = new FileReader();
     reader.onloadend = () => {
       this.setState({
         image: reader.result,
+        errors,
       });
     };
     reader.readAsDataURL(file);
@@ -140,6 +152,7 @@ class UserPage extends Component {
           pendingUpdateCall={this.state.pendingUpdateCall}
           loadedImage={this.state.image}
           onFileSelect={this.onFileSelect}
+          errors={this.state.errors}
         />
       );
     }
