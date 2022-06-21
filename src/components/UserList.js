@@ -1,6 +1,7 @@
 import { Component } from "react";
 import * as apiCalls from "../api/apiCalls";
 import UserListItem from "./UserListItem";
+import { connect } from "react-redux";
 
 class UserList extends Component {
   state = {
@@ -13,6 +14,12 @@ class UserList extends Component {
 
   componentDidMount() {
     this.loadData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!this.props.user.isLoggedIn && prevProps.user.isLoggedIn) {
+      this.loadData();
+    }
   }
 
   loadData = (requestedPage = 0) => {
@@ -76,4 +83,10 @@ class UserList extends Component {
   }
 }
 
-export default UserList;
+const mapStateToProps = (state) => {
+  return {
+    user: state,
+  };
+};
+
+export default connect(mapStateToProps)(UserList);
