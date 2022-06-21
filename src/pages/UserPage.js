@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import * as apiCalls from "../api/apiCalls";
 import ProfileCard from "../components/ProfileCard";
 import { connect } from "react-redux";
+import HoaxFeed from "../components/HoaxFeed";
+import Spinner from "../components/Spinner";
 
 class UserPage extends Component {
   state = {
@@ -130,13 +132,7 @@ class UserPage extends Component {
   render() {
     let pageContent;
     if (this.state.isLoadingUser) {
-      pageContent = (
-        <div className="d-flex">
-          <div className="spinner-border text-black-50 m-auto">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      );
+      pageContent = <Spinner />;
     } else if (this.state.userNotFound) {
       pageContent = (
         <div className="alert alert-danger text-center">
@@ -165,7 +161,16 @@ class UserPage extends Component {
         />
       );
     }
-    return <div>{pageContent}</div>;
+    return (
+      <div>
+        <div className="row">
+          <div className="col">{pageContent}</div>
+          <div className="col">
+            <HoaxFeed user={this.props.match.params.username} />
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 UserPage.defaultProps = {
