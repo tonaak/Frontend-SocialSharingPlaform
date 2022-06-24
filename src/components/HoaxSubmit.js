@@ -3,6 +3,7 @@ import ProfileImageWithDefault from "./ProfileImageWithDefault";
 import { connect } from "react-redux";
 import * as apiCalls from "../api/apiCalls";
 import ButtonWithProgress from "./ButtonWithProgress";
+import Input from "./Input";
 
 class HoaxSubmit extends Component {
   state = {
@@ -10,6 +11,9 @@ class HoaxSubmit extends Component {
     content: undefined,
     pendingApiCall: false,
     errors: {},
+    file: undefined,
+    image: undefined,
+    attachment: undefined,
   };
 
   onChangeContent = (event) => {
@@ -17,19 +21,56 @@ class HoaxSubmit extends Component {
     this.setState({ content: value, errors: {} });
   };
 
+  onFileSelect = (event) => {
+    if (event.target.files.length === 0) {
+      return;
+    }
+    const file = event.target.files[0];
+    let reader = new FileReader();
+    reader.onloadend = () => {
+      this.setState(
+        {
+          image: reader.result,
+          file,
+        },
+        () => {
+          this.uploadFile();
+        }
+      );
+    };
+    reader.readAsDataURL(file);
+  };
+
+  uploadFile = () => {
+    const body = new FormData();
+    body.append("file", this.state.file);
+    apiCalls.postHoaxFile(body).then((response) => {
+      this.setState({ attachment: response.data });
+    });
+  };
+
+  resetState = () => {
+    this.setState({
+      pendingApiCall: false,
+      focused: false,
+      content: "",
+      errors: {},
+      image: undefined,
+      file: undefined,
+      attachment: undefined,
+    });
+  };
+
   onClickPost = () => {
     const body = {
       content: this.state.content,
+      attachment: this.state.attachment,
     };
     this.setState({ pendingApiCall: true });
     apiCalls
       .postHoax(body)
       .then((response) => {
-        this.setState({
-          focused: false,
-          content: "",
-          pendingApiCall: false,
-        });
+        this.resetState();
       })
       .catch((error) => {
         let errors = {};
@@ -42,14 +83,6 @@ class HoaxSubmit extends Component {
 
   onFocus = () => {
     this.setState({ focused: true });
-  };
-
-  onClickCancel = () => {
-    this.setState({
-      focused: false,
-      content: "",
-      errors: {},
-    });
   };
 
   render() {
@@ -79,21 +112,35 @@ class HoaxSubmit extends Component {
             </span>
           )}
           {this.state.focused && (
-            <div className="text-end mt-2">
-              <ButtonWithProgress
-                disabled={this.state.pendingApiCall}
-                className="btn btn-success"
-                onClick={this.onClickPost}
-                pendingApiCall={this.state.pendingApiCall}
-                text="Post"
-              />
-              <button
-                className="btn btn-light ms-1"
-                onClick={this.onClickCancel}
-                disabled={this.state.pendingApiCall}
-              >
-                <i className="fas fa-times" /> Cancel
-              </button>
+            <div>
+              <div className="pt-1">
+                <Input type="file" onChange={this.onFileSelect} />
+                {this.state.image && (
+                  <img
+                    className="mt-1 img-thumbnail"
+                    src={this.state.image}
+                    alt="upload"
+                    width="128"
+                    height="64"
+                  />
+                )}
+              </div>
+              <div className="text-end mt-2">
+                <ButtonWithProgress
+                  disabled={this.state.pendingApiCall}
+                  className="btn btn-success"
+                  onClick={this.onClickPost}
+                  pendingApiCall={this.state.pendingApiCall}
+                  text="Post"
+                />
+                <button
+                  className="btn btn-light ms-1"
+                  onClick={this.resetState}
+                  disabled={this.state.pendingApiCall}
+                >
+                  <i className="fas fa-times" /> Cancel
+                </button>
+              </div>
             </div>
           )}
         </div>
