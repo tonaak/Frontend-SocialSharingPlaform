@@ -1,4 +1,5 @@
 import axios from "axios";
+// const vi = { "Accept-Language": "vi-VN,vi;" };
 
 export const signup = (user) => {
   return axios.post("/api/1.0/users", user);
