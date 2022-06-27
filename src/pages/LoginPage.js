@@ -3,6 +3,7 @@ import ButtonWithProgress from "../components/ButtonWithProgress";
 import Input from "../components/Input";
 import { connect } from "react-redux";
 import * as authActions from "../redux/authActions";
+import { Link } from "react-router-dom";
 
 export const LoginPage = (props) => {
   const [username, setUsername] = useState("");
@@ -42,11 +43,11 @@ export const LoginPage = (props) => {
   }
 
   return (
-    <div className="container">
-      <h1 className="text-center">Login</h1>
-      <div className="col-12 mb-3">
+    <div className="container col-5 shadow rounded p-5">
+      <h1 className="text-center mb-4">Login</h1>
+      <div className="col-12 mb-4">
         <Input
-          label="Username"
+          label=""
           placeholder="Your username"
           value={username}
           onChange={(event) => {
@@ -54,9 +55,9 @@ export const LoginPage = (props) => {
           }}
         />
       </div>
-      <div className="col-12 mb-3">
+      <div className="col-12 mb-4">
         <Input
-          label="Password"
+          label=""
           placeholder="Your password"
           type="password"
           value={password}
@@ -66,17 +67,23 @@ export const LoginPage = (props) => {
         />
       </div>
       {apiError && (
-        <div className="col-12 mb-3">
+        <div className="col-12 mb-4">
           <div className="alert alert-danger">{apiError}</div>
         </div>
       )}
-      <div className="text-center">
+      <div className="text-center d-grid gap-2 col-12 mx-auto">
         <ButtonWithProgress
           onClick={onClickLogin}
           disabled={disableSubmit || pendingApiCall}
           text="Login"
           pendingApiCall={pendingApiCall}
         />
+        <p className="fw-bold mt-2 pt-1 mb-0">
+          Don't have an account?{" "}
+          <Link to="/signup" className="link-danger">
+            Signup
+          </Link>
+        </p>
       </div>
     </div>
   );
