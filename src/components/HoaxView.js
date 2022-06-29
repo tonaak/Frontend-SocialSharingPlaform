@@ -15,7 +15,7 @@ class HoaxView extends Component {
 
     const ownedByLoggedInUser = user.id === this.props.loggedInUser.id;
     return (
-      <div className="card p-1 py-2">
+      <div className="card p-1 py-2 mb-4">
         <div className="d-flex">
           <ProfileImageWithDefault
             className="rounded-circle m-1 mb-0"
@@ -28,9 +28,7 @@ class HoaxView extends Component {
               to={`/${username}`}
               className="list-group-item-action text-decoration-none"
             >
-              <h6 className="d-inline">
-                {displayName}@{username}
-              </h6>
+              <h6 className="d-inline">{displayName}</h6>
             </Link>
             <span className="text-black-50"> - </span>
             <span className="text-black-50">{relativeDate}</span>
@@ -44,7 +42,7 @@ class HoaxView extends Component {
             </button>
           )}
         </div>
-        <div className="ps-5">{hoax.content}</div>
+        <div className="ps-5 mb-2">{hoax.content}</div>
         {attachmentImageVisible && (
           <div className="ps-5">
             <img

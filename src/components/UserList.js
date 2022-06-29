@@ -47,7 +47,7 @@ class UserList extends Component {
   render() {
     return (
       <div className="card user-select-none">
-        <h3 className="card-title m-auto">Users</h3>
+        <h3 className="card-title m-auto my-1">Users</h3>
         <div className="list-group list-group-flush">
           {this.state.page.content.map((user) => {
             return <UserListItem key={user.username} user={user} />;

@@ -110,14 +110,14 @@ class HoaxFeed extends Component {
     }
     if (this.state.page.content.length === 0 && this.state.newHoaxCount === 0) {
       return (
-        <div className="card card-header text-center">There are no hoaxes</div>
+        <div className="card card-header text-center">There are no posts</div>
       );
     }
 
     const newHoaxCountMessage =
       this.state.newHoaxCount === 1
-        ? "There is 1 new hoax"
-        : `There are ${this.state.newHoaxCount} new hoaxes`;
+        ? "There is 1 new post"
+        : `There are ${this.state.newHoaxCount} new posts`;
 
     return (
       <div>
@@ -145,7 +145,7 @@ class HoaxFeed extends Component {
         })}
         {this.state.page.last === false && (
           <div
-            className="card card-header text-center"
+            className="card card-header text-center mb-4"
             onClick={
               !this.state.isLoadingOldHoaxes ? this.onClickLoadMore : undefined
             }
