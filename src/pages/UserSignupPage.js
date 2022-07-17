@@ -4,6 +4,7 @@ import Input from "../components/Input";
 import { connect } from "react-redux";
 import * as authActions from "../redux/authActions";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const UserSignupPage = (props) => {
   const [form, setForm] = useState({
@@ -15,6 +16,8 @@ export const UserSignupPage = (props) => {
   });
   const [errors, setErrors] = useState({});
   const [pendingApiCall, setPendingApiCall] = useState(false);
+
+  const { t } = useTranslation();
 
   const onChange = (event) => {
     const { value, name } = event.target;
@@ -59,7 +62,7 @@ export const UserSignupPage = (props) => {
   const { password, passwordRepeat } = form;
   if (password || passwordRepeat) {
     passwordRepeatError =
-      password === passwordRepeat ? "" : "Does not match to password";
+      password === passwordRepeat ? "" : `${t("passwordNotMatch")}`;
   }
 
   let emailFormatError;
@@ -69,17 +72,17 @@ export const UserSignupPage = (props) => {
   if (email) {
     emailFormatError = email.match(mailformat)
       ? ""
-      : `${email} is not a valid email address`;
+      : `${email} ${t("emailNotValid")}`;
   }
 
   return (
-    <div className="container col-6 shadow rounded p-5">
-      <h1 className="text-center">Sign Up</h1>
+    <div className="container col-6 shadow rounded p-5 mb-3">
+      <h1 className="text-center">{t("signup")}</h1>
       <div className="col-12 mb-3">
         <Input
           name="email"
-          label="Email Address"
-          placeholder="Your email address"
+          label={t("email")}
+          placeholder={t("emailHolder")}
           value={form.email}
           onChange={onChange}
           hasError={emailFormatError && true}
@@ -89,8 +92,8 @@ export const UserSignupPage = (props) => {
       <div className="col-12 mb-3">
         <Input
           name="displayName"
-          label="Display Name"
-          placeholder="Your display name"
+          label={t("displayName")}
+          placeholder={t("displayNameHolder")}
           value={form.displayName}
           onChange={onChange}
           hasError={errors.displayName && true}
@@ -100,8 +103,8 @@ export const UserSignupPage = (props) => {
       <div className="col-12 mb-3">
         <Input
           name="username"
-          label="Username"
-          placeholder="Your username"
+          label={t("username")}
+          placeholder={t("usernamePlaceHolder")}
           value={form.username}
           onChange={onChange}
           hasError={errors.username && true}
@@ -111,8 +114,8 @@ export const UserSignupPage = (props) => {
       <div className="col-12 mb-3">
         <Input
           name="password"
-          label="Password"
-          placeholder="Your password"
+          label={t("password")}
+          placeholder={t("passwordPlaceHolder")}
           type="password"
           value={form.password}
           onChange={onChange}
@@ -123,8 +126,8 @@ export const UserSignupPage = (props) => {
       <div className="col-12 mb-4">
         <Input
           name="passwordRepeat"
-          label="Password Repeat"
-          placeholder="Repeat your password"
+          label={t("passwordRepeat")}
+          placeholder={t("passwordRepeatHolder")}
           type="password"
           value={form.passwordRepeat}
           onChange={onChange}
@@ -141,12 +144,12 @@ export const UserSignupPage = (props) => {
               : false
           }
           pendingApiCall={pendingApiCall}
-          text="Sign Up"
+          text={t("signup")}
         />
         <p className="fw-bold mt-2 pt-1 mb-0">
-          Have already an account?{" "}
+          {t("askForLogin")}{" "}
           <Link to="/login" className="link-danger">
-            Login here
+            {t("login")}
           </Link>
         </p>
       </div>

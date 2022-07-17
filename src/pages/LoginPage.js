@@ -4,12 +4,14 @@ import Input from "../components/Input";
 import { connect } from "react-redux";
 import * as authActions from "../redux/authActions";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const LoginPage = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [apiError, setApiError] = useState();
   const [pendingApiCall, setPendingApiCall] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setApiError();
@@ -44,11 +46,11 @@ export const LoginPage = (props) => {
 
   return (
     <div className="container col-5 shadow rounded p-5">
-      <h1 className="text-center mb-4">Login</h1>
+      <h1 className="text-center mb-4">{t("login")}</h1>
       <div className="col-12 mb-4">
         <Input
           label=""
-          placeholder="Your username"
+          placeholder={t("usernamePlaceHolder")}
           value={username}
           onChange={(event) => {
             setUsername(event.target.value);
@@ -58,7 +60,7 @@ export const LoginPage = (props) => {
       <div className="col-12 mb-4">
         <Input
           label=""
-          placeholder="Your password"
+          placeholder={t("passwordPlaceHolder")}
           type="password"
           value={password}
           onChange={(event) => {
@@ -75,13 +77,13 @@ export const LoginPage = (props) => {
         <ButtonWithProgress
           onClick={onClickLogin}
           disabled={disableSubmit || pendingApiCall}
-          text="Login"
+          text={t("login")}
           pendingApiCall={pendingApiCall}
         />
         <p className="fw-bold mt-2 pt-1 mb-0">
-          Don't have an account?{" "}
+          {t("askForSignup")}{" "}
           <Link to="/signup" className="link-danger">
-            Signup
+            {t("signup")}
           </Link>
         </p>
       </div>
