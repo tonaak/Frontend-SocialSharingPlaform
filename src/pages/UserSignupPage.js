@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ButtonWithProgress from "../components/ButtonWithProgress";
 import Input from "../components/Input";
 import { connect } from "react-redux";
@@ -17,7 +17,11 @@ export const UserSignupPage = (props) => {
   const [errors, setErrors] = useState({});
   const [pendingApiCall, setPendingApiCall] = useState(false);
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    setErrors({});
+  }, [i18n.language]);
 
   const onChange = (event) => {
     const { value, name } = event.target;
@@ -42,6 +46,7 @@ export const UserSignupPage = (props) => {
       displayName: form.displayName,
       username: form.username,
       password: form.password,
+      language: i18n.language,
     };
     setPendingApiCall(true);
     props.actions

@@ -32,6 +32,11 @@ i18n
           passwordRepeat: "Password Repeat",
           passwordRepeatHolder: "Repeat your password",
           askForLogin: "Have already an account?",
+          //use list
+          userLoadError: "User load failed",
+          people: "People",
+          next: "next >",
+          previous: "< previous",
         },
       },
       vi: {
@@ -54,6 +59,11 @@ i18n
           passwordRepeat: "Nhập lại mật khẩu",
           passwordRepeatHolder: "Nhập lại mật khẩu của bạn",
           askForLogin: "Đã có tài khoản?",
+          //use list
+          userLoadError: "Lỗi khi tải dữ liệu",
+          people: "Mọi người",
+          next: "sau >",
+          previous: "< trước",
         },
       },
     },

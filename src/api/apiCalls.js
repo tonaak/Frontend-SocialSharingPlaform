@@ -1,8 +1,12 @@
 import axios from "axios";
-// const vi = { "Accept-Language": "vi-VN,vi;" };
+const vi = { "Accept-Language": "vi-VN,vi;" };
 
 export const signup = (user) => {
-  return axios.post("/api/1.0/users", user);
+  if (user.language === "vi") {
+    return axios.post("/api/1.0/users", user, { headers: vi });
+  } else {
+    return axios.post("/api/1.0/users", user);
+  }
 };
 
 export const login = (user) => {
