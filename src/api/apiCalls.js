@@ -33,11 +33,19 @@ export const getUser = (username) => {
 };
 
 export const updateUser = (userId, body) => {
-  return axios.put("/api/1.0/users/" + userId, body);
+  if (body.language === "vi") {
+    return axios.put("/api/1.0/users/" + userId, body, { headers: vi });
+  } else {
+    return axios.put("/api/1.0/users/" + userId, body);
+  }
 };
 
 export const postHoax = (hoax) => {
-  return axios.post("/api/1.0/hoaxes", hoax);
+  if (hoax.language === "vi") {
+    return axios.post("/api/1.0/hoaxes", hoax, { headers: vi });
+  } else {
+    return axios.post("/api/1.0/hoaxes", hoax);
+  }
 };
 
 export const loadHoaxes = (username) => {

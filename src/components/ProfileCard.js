@@ -2,11 +2,14 @@ import React from "react";
 import ProfileImageWithDefault from "./ProfileImageWithDefault";
 import Input from "./Input";
 import ButtonWithProgress from "./ButtonWithProgress";
+import { useTranslation } from "react-i18next";
 
 const ProfileCard = (props) => {
   const { displayName, username, image } = props.user;
 
   const showEditButton = props.isEditable && !props.inEditMode;
+
+  const { t } = useTranslation();
 
   return (
     <div className="card">
@@ -26,7 +29,7 @@ const ProfileCard = (props) => {
           <div className="mb-2">
             <Input
               value={displayName}
-              label={`Change Display Name for ${username}`}
+              label={`${t("changeDisplayNamelb")} ${username}`}
               onChange={props.onChangeDisplayName}
               hasError={props.errors.displayName && true}
               error={props.errors.displayName}
@@ -46,7 +49,7 @@ const ProfileCard = (props) => {
             className="btn btn-outline-success"
             onClick={props.onClickEdit}
           >
-            <i className="fas fa-user-edit" /> Edit
+            <i className="fas fa-user-edit" /> {t("edit")}
           </button>
         )}
         {props.inEditMode && (
@@ -56,7 +59,7 @@ const ProfileCard = (props) => {
               onClick={props.onClickSave}
               text={
                 <span>
-                  <i className="fas fa-save" /> Save
+                  <i className="fas fa-save" /> {t("save")}
                 </span>
               }
               pendingApiCall={props.pendingUpdateCall}
@@ -67,7 +70,7 @@ const ProfileCard = (props) => {
               onClick={props.onClickCancel}
               disabled={props.pendingUpdateCall}
             >
-              <i className="fas fa-window-close" /> Cancel
+              <i className="fas fa-window-close" /> {t("cancel")}
             </button>
           </div>
         )}

@@ -37,6 +37,23 @@ i18n
           people: "People",
           next: "next >",
           previous: "< previous",
+          //user page
+          userNotFound: "User not found",
+          //profile card
+          changeDisplayNamelb: "Change Display Name for",
+          edit: "Edit",
+          save: "Save",
+          cancel: "Cancel",
+          //feed
+          noPost: "There are no posts",
+          oneNew: "There is 1 new post",
+          thereAre: "There are",
+          newPosts: "new posts",
+          loadMore: "Load more",
+          sure: "Are you sure to delete",
+          deleteTitle: "Confirm delete!",
+          delete: "Delete",
+          post: "Post",
         },
       },
       vi: {
@@ -64,6 +81,23 @@ i18n
           people: "Mọi người",
           next: "sau >",
           previous: "< trước",
+          //user page
+          userNotFound: "Tài khoản không tồn tại",
+          //profile card
+          changeDisplayNamelb: "Thay đổi tên hiển thị cho",
+          edit: "Chỉnh sửa",
+          save: "Lưu",
+          cancel: "Hủy bỏ",
+          //feed
+          noPost: "Không có bài viết",
+          oneNew: "Có 1 bài viết mới",
+          thereAre: "Có",
+          newPosts: "bài viết mới",
+          loadMore: "Tải thêm",
+          sure: "Bạn có muốn xóa",
+          deleteTitle: "Xác nhận xóa!",
+          delete: "Xóa",
+          post: "Đăng",
         },
       },
     },

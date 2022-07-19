@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import * as apiCalls from "../api/apiCalls";
 import ButtonWithProgress from "./ButtonWithProgress";
 import Input from "./Input";
+import { Trans } from "react-i18next";
+import i18n from "../i18n";
 
 class HoaxSubmit extends Component {
   state = {
@@ -65,6 +67,7 @@ class HoaxSubmit extends Component {
     const body = {
       content: this.state.content,
       attachment: this.state.attachment,
+      language: i18n.language,
     };
     this.setState({ pendingApiCall: true });
     apiCalls
@@ -131,14 +134,14 @@ class HoaxSubmit extends Component {
                   className="btn btn-success"
                   onClick={this.onClickPost}
                   pendingApiCall={this.state.pendingApiCall}
-                  text="Post"
+                  text={<Trans i18nKey={"post"} />}
                 />
                 <button
                   className="btn btn-light ms-1"
                   onClick={this.resetState}
                   disabled={this.state.pendingApiCall}
                 >
-                  <i className="fas fa-times" /> Cancel
+                  <i className="fas fa-times" /> {<Trans i18nKey={"cancel"} />}
                 </button>
               </div>
             </div>
