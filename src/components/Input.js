@@ -17,6 +17,7 @@ const Input = (props) => {
         placeholder={props.placeholder}
         value={props.value}
         onChange={props.onChange}
+        onKeyUp={props.onKeyUp}
       />
       {props.hasError && (
         <span className="invalid-feedback">{props.error}</span>
@@ -27,6 +28,7 @@ const Input = (props) => {
 
 Input.defaultProps = {
   onChange: () => {},
+  onKeyUp: () => {},
 };
 
 export default Input;

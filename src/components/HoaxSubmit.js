@@ -15,6 +15,8 @@ class HoaxSubmit extends Component {
     errors: {},
     file: undefined,
     image: undefined,
+    video: undefined,
+    audio: undefined,
     attachment: undefined,
   };
 
@@ -30,10 +32,25 @@ class HoaxSubmit extends Component {
     const file = event.target.files[0];
     let reader = new FileReader();
     reader.onloadend = () => {
+      let image = undefined;
+      let video = undefined;
+      let audio = undefined;
+      if (file.type.startsWith("image")) {
+        image = reader.result;
+      }
+      if (file.type.startsWith("video")) {
+        video = reader.result;
+      }
+      if (file.type.startsWith("audio")) {
+        audio = reader.result;
+      }
       this.setState(
         {
-          image: reader.result,
+          image,
+          video,
+          audio,
           file,
+          errors: {},
         },
         () => {
           this.uploadFile();
@@ -58,6 +75,8 @@ class HoaxSubmit extends Component {
       content: "",
       errors: {},
       image: undefined,
+      video: undefined,
+      audio: undefined,
       file: undefined,
       attachment: undefined,
     });
@@ -93,6 +112,7 @@ class HoaxSubmit extends Component {
     if (this.state.errors.content) {
       textAreaClassName += " is-invalid";
     }
+
     return (
       <div className="card d-flex flex-row p-1">
         <ProfileImageWithDefault
@@ -116,8 +136,13 @@ class HoaxSubmit extends Component {
           )}
           {this.state.focused && (
             <div>
-              <div className="pt-1">
+              <div className="pt-1 mt-2">
                 <Input type="file" onChange={this.onFileSelect} />
+                {this.state.errors.attachment && (
+                  <span className="invalid-feedback d-block fw-bold mb-2">
+                    {this.state.errors.attachment}
+                  </span>
+                )}
                 {this.state.image && (
                   <img
                     className="mt-1 img-thumbnail"
@@ -126,6 +151,23 @@ class HoaxSubmit extends Component {
                     width="128"
                     height="64"
                   />
+                )}
+                {this.state.video && (
+                  <div className="mt-2">
+                    <video width={400} controls poster="placeholder.png">
+                      <source
+                        src={`${this.state.video}#t=2`}
+                        type="video/mp4"
+                      />
+                    </video>
+                  </div>
+                )}
+                {this.state.audio && (
+                  <div className="mt-2">
+                    <audio controls>
+                      <source src={this.state.audio} type="audio/mpeg" />
+                    </audio>
+                  </div>
                 )}
               </div>
               <div className="text-end mt-2">

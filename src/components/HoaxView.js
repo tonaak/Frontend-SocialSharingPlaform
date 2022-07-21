@@ -4,27 +4,10 @@ import { format, register } from "timeago.js";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
+import timeagoVNLocale from "../timeagoVN";
 
 const HoaxView = (props) => {
-  const locale = function (number, index, totalSec) {
-    return [
-      ["vừa xong", "một lúc"],
-      ["%s giây trước", "trong %s giây"],
-      ["1 phút trước", "trong 1 phút"],
-      ["%s phút trước", "trong %s phút"],
-      ["1 giờ trước", "trong 1 giờ"],
-      ["%s giờ trước", "trong %s giờ"],
-      ["1 ngày trước", "trong 1 ngày"],
-      ["%s ngày trước", "trong %s ngày"],
-      ["1 tuần trước", "trong 1 tuần"],
-      ["%s tuần trước", "trong %s tuần"],
-      ["1 tháng trước", "trong 1 tháng"],
-      ["%s tháng trước", "trong %s tháng"],
-      ["1 năm trước", "trong 1 năm"],
-      ["%s năm trước", "trong %s năm"],
-    ][index];
-  };
-  register("vi", locale);
+  register("vi", timeagoVNLocale);
 
   const { i18n } = useTranslation();
   const { hoax, onClickDelete } = props;
@@ -33,6 +16,10 @@ const HoaxView = (props) => {
   let relativeDate = i18n.language === "vi" ? format(date, "vi") : format(date);
   const attachmentImageVisible =
     hoax.attachment && hoax.attachment.fileType.startsWith("image");
+  const attachmentVideoVisible =
+    hoax.attachment && hoax.attachment.fileType.startsWith("video");
+  const attachmentAudioVisible =
+    hoax.attachment && hoax.attachment.fileType.startsWith("audio");
 
   const ownedByLoggedInUser = user.id === props.loggedInUser.id;
 
@@ -77,6 +64,26 @@ const HoaxView = (props) => {
             src={`/images/attachments/${hoax.attachment.name}`}
             className="img-fluid"
           />
+        </div>
+      )}
+      {attachmentVideoVisible && (
+        <div className="ps-5">
+          <video className="img-fluid" controls>
+            <source
+              src={`/images/attachments/${hoax.attachment.name}`}
+              type="video/mp4"
+            />
+          </video>
+        </div>
+      )}
+      {attachmentAudioVisible && (
+        <div className="ps-5">
+          <audio className="w-100" controls>
+            <source
+              src={`/images/attachments/${hoax.attachment.name}`}
+              type="audio/mpeg"
+            />
+          </audio>
         </div>
       )}
     </div>

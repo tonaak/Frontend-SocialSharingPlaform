@@ -40,6 +40,30 @@ export const UserSignupPage = (props) => {
     });
   };
 
+  const onChangeUsername = (event) => {
+    if (event.target.value.length >= 4) {
+      const user = {
+        username: form.username,
+        language: i18n.language,
+      };
+      props.actions
+        .postSignup(user)
+        .then((response) => {
+          props.history.push("/");
+        })
+        .catch((apiError) => {
+          if (
+            apiError.response.data &&
+            apiError.response.data.validationErrors
+          ) {
+            setErrors({
+              username: apiError.response.data.validationErrors.username,
+            });
+          }
+        });
+    }
+  };
+
   const onClickSignup = () => {
     const user = {
       email: form.email,
@@ -112,6 +136,7 @@ export const UserSignupPage = (props) => {
           placeholder={t("usernamePlaceHolder")}
           value={form.username}
           onChange={onChange}
+          onKeyUp={onChangeUsername}
           hasError={errors.username && true}
           error={errors.username}
         />
