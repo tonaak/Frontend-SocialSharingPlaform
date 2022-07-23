@@ -3,6 +3,7 @@ import ButtonWithProgress from "../components/ButtonWithProgress";
 import Input from "../components/Input";
 import { connect } from "react-redux";
 import * as authActions from "../redux/authActions";
+import * as apiCalls from "../api/apiCalls";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -11,6 +12,7 @@ export const LoginPage = (props) => {
   const [password, setPassword] = useState("");
   const [apiError, setApiError] = useState();
   const [pendingApiCall, setPendingApiCall] = useState(false);
+  const [userNotFound, setUserNotFound] = useState();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -18,24 +20,47 @@ export const LoginPage = (props) => {
   }, [username, password]);
 
   const onClickLogin = () => {
-    const body = {
-      username,
-      password,
-    };
-    setPendingApiCall(true);
-    props.actions
-      .postLogin(body)
+    if (userNotFound === undefined) {
+      const body = {
+        username,
+        password,
+      };
+      setPendingApiCall(true);
+      props.actions
+        .postLogin(body)
+        .then((response) => {
+          setPendingApiCall(false);
+          props.history.push("/");
+        })
+        .catch((error) => {
+          if (error.response.status === 401 && userNotFound === undefined) {
+            setPendingApiCall(false);
+            setApiError(`${t("wrongPassword")}`);
+          }
+          setPendingApiCall(false);
+        });
+    }
+  };
+
+  const onEnterLogin = (event) => {
+    if (event.key === "Enter" && !disableSubmit) {
+      onClickLogin();
+    }
+  };
+
+  const onChangeCheckUserExist = (event) => {
+    apiCalls
+      .getUser(event.target.value)
       .then((response) => {
-        setPendingApiCall(false);
-        props.history.push("/");
+        setUserNotFound();
       })
       .catch((error) => {
-        if (error.response) {
-          setPendingApiCall(false);
-          setApiError(error.response.data.message);
+        if (error.response.data.message.includes("not found")) {
+          setUserNotFound(true);
         }
       });
   };
+
   let disableSubmit = false;
   if (username === "") {
     disableSubmit = true;
@@ -55,6 +80,12 @@ export const LoginPage = (props) => {
           onChange={(event) => {
             setUsername(event.target.value);
           }}
+          onKeyUp={(event) => {
+            onChangeCheckUserExist(event);
+            onEnterLogin(event);
+          }}
+          hasError={userNotFound}
+          error={t("userNotFound")}
         />
       </div>
       <div className="col-12 mb-4">
@@ -65,6 +96,9 @@ export const LoginPage = (props) => {
           value={password}
           onChange={(event) => {
             setPassword(event.target.value);
+          }}
+          onKeyUp={(event) => {
+            onEnterLogin(event);
           }}
         />
       </div>

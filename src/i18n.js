@@ -32,6 +32,7 @@ i18n
           passwordRepeat: "Password Repeat",
           passwordRepeatHolder: "Repeat your password",
           askForLogin: "Have already an account?",
+          wrongPassword: "Incorrect password",
           //use list
           userLoadError: "User load failed",
           people: "People",
@@ -76,6 +77,7 @@ i18n
           passwordRepeat: "Nhập lại mật khẩu",
           passwordRepeatHolder: "Nhập lại mật khẩu của bạn",
           askForLogin: "Đã có tài khoản?",
+          wrongPassword: "Sai mật khẩu",
           //use list
           userLoadError: "Lỗi khi tải dữ liệu",
           people: "Mọi người",

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import * as authActions from "../redux/authActions";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import * as apiCalls from "../api/apiCalls";
 
 export const UserSignupPage = (props) => {
   const [form, setForm] = useState({
@@ -46,15 +47,13 @@ export const UserSignupPage = (props) => {
         username: form.username,
         language: i18n.language,
       };
-      props.actions
-        .postSignup(user)
-        .then((response) => {
-          props.history.push("/");
-        })
+      apiCalls
+        .signup(user)
+        .then((response) => {})
         .catch((apiError) => {
           if (
             apiError.response.data &&
-            apiError.response.data.validationErrors
+            apiError.response.data.validationErrors.username
           ) {
             setErrors({
               username: apiError.response.data.validationErrors.username,
@@ -114,8 +113,8 @@ export const UserSignupPage = (props) => {
           placeholder={t("emailHolder")}
           value={form.email}
           onChange={onChange}
-          hasError={emailFormatError && true}
-          error={emailFormatError}
+          hasError={(emailFormatError || errors.email) && true}
+          error={emailFormatError || errors.email}
         />
       </div>
       <div className="col-12 mb-3">
