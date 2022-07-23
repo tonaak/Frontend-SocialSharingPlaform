@@ -114,6 +114,11 @@ export const LoginPage = (props) => {
           text={t("login")}
           pendingApiCall={pendingApiCall}
         />
+        <p className="fw-normal pt-1 mb-0">
+          <Link to="/forgot" className="text-decoration-none">
+            {t("forgotPassword")}?
+          </Link>
+        </p>
         <p className="fw-bold mt-2 pt-1 mb-0">
           {t("askForSignup")}{" "}
           <Link to="/signup" className="link-danger">

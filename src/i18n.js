@@ -33,6 +33,15 @@ i18n
           passwordRepeatHolder: "Repeat your password",
           askForLogin: "Have already an account?",
           wrongPassword: "Incorrect password",
+          forgotPassword: "Forgot Password",
+          resetPassword: "Reset Password",
+          newPassword: "New password",
+          invalidPassword:
+            "At least 1 uppercase, 1 lowercase, 1 number and at least 8 characters",
+          emailSent:
+            "We have sent a reset password link to your email. Please check",
+          emailNotSent: "Error. Check your email address again",
+          invalidToken: "Invalid token",
           //use list
           userLoadError: "User load failed",
           people: "People",
@@ -78,6 +87,15 @@ i18n
           passwordRepeatHolder: "Nhập lại mật khẩu của bạn",
           askForLogin: "Đã có tài khoản?",
           wrongPassword: "Sai mật khẩu",
+          forgotPassword: "Quên mật khẩu",
+          resetPassword: "Đặt lại mật khẩu",
+          newPassword: "Mật khẩu mới",
+          invalidPassword:
+            "Ít nhất 1 chữ in hoa, 1 chữ thường, 1 số và ít nhất 8 ký tự",
+          emailSent:
+            "Chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu đến email của bạn, hãy kiểm tra",
+          emailNotSent: "Lỗi. Kiểm tra lại địa chỉ email của bạn",
+          invalidToken: "Token không hợp lệ",
           //use list
           userLoadError: "Lỗi khi tải dữ liệu",
           people: "Mọi người",
