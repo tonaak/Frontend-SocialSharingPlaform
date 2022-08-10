@@ -42,6 +42,7 @@ i18n
             "We have sent a reset password link to your email. Please check",
           emailNotSent: "Error. Check your email address again",
           invalidToken: "Invalid token",
+          passwordChanged: "Changed password successfully",
           //use list
           userLoadError: "User load failed",
           people: "People",
@@ -96,6 +97,7 @@ i18n
             "Chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu đến email của bạn, hãy kiểm tra",
           emailNotSent: "Lỗi. Kiểm tra lại địa chỉ email của bạn",
           invalidToken: "Token không hợp lệ",
+          passwordChanged: "Đổi mật khẩu thành công",
           //use list
           userLoadError: "Lỗi khi tải dữ liệu",
           people: "Mọi người",

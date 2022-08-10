@@ -44,6 +44,7 @@ export const ResetPassword = (props) => {
       })
       .then((response) => {
         setPendingApiCall(false);
+        alert(`${t("passwordChanged")}`);
         props.history.push("/login");
       })
       .catch((error) => {

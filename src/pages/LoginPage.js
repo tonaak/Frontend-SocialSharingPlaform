@@ -20,26 +20,25 @@ export const LoginPage = (props) => {
   }, [username, password]);
 
   const onClickLogin = () => {
-    if (userNotFound === undefined) {
-      const body = {
-        username,
-        password,
-      };
-      setPendingApiCall(true);
-      props.actions
-        .postLogin(body)
-        .then((response) => {
+    checkUserExist();
+    const body = {
+      username,
+      password,
+    };
+    setPendingApiCall(true);
+    props.actions
+      .postLogin(body)
+      .then((response) => {
+        setPendingApiCall(false);
+        props.history.push("/");
+      })
+      .catch((error) => {
+        if (error.response.status === 401 && userNotFound === undefined) {
           setPendingApiCall(false);
-          props.history.push("/");
-        })
-        .catch((error) => {
-          if (error.response.status === 401 && userNotFound === undefined) {
-            setPendingApiCall(false);
-            setApiError(`${t("wrongPassword")}`);
-          }
-          setPendingApiCall(false);
-        });
-    }
+          setApiError(`${t("wrongPassword")}`);
+        }
+        setPendingApiCall(false);
+      });
   };
 
   const onEnterLogin = (event) => {
@@ -48,16 +47,12 @@ export const LoginPage = (props) => {
     }
   };
 
-  const onChangeCheckUserExist = (event) => {
+  const checkUserExist = () => {
     apiCalls
-      .getUser(event.target.value)
-      .then((response) => {
-        setUserNotFound();
-      })
+      .getUser(username)
+      .then((response) => {})
       .catch((error) => {
-        if (error.response.data.message.includes("not found")) {
-          setUserNotFound(true);
-        }
+        setUserNotFound(true);
       });
   };
 
@@ -79,9 +74,9 @@ export const LoginPage = (props) => {
           value={username}
           onChange={(event) => {
             setUsername(event.target.value);
+            setUserNotFound();
           }}
           onKeyUp={(event) => {
-            onChangeCheckUserExist(event);
             onEnterLogin(event);
           }}
           hasError={userNotFound}
@@ -109,7 +104,9 @@ export const LoginPage = (props) => {
       )}
       <div className="text-center d-grid gap-2 col-12 mx-auto">
         <ButtonWithProgress
-          onClick={onClickLogin}
+          onClick={() => {
+            onClickLogin();
+          }}
           disabled={disableSubmit || pendingApiCall}
           text={t("login")}
           pendingApiCall={pendingApiCall}

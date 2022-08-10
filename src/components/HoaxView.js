@@ -1,13 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileImageWithDefault from "./ProfileImageWithDefault";
 import { format, register } from "timeago.js";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
 import timeagoVNLocale from "../timeagoVN";
+import axios from "axios";
 
 const HoaxView = (props) => {
   register("vi", timeagoVNLocale);
+
+  const [like, setLike] = useState(false);
+  const [dislike, setDislike] = useState(false);
+  const [countLike, setCountLike] = useState(0);
+  const [countDislike, setCountDislike] = useState(0);
 
   const { i18n } = useTranslation();
   const { hoax, onClickDelete } = props;
@@ -27,6 +33,51 @@ const HoaxView = (props) => {
     //eslint-disable-next-line
     relativeDate = i18n.language === "vi" ? format(date, "vi") : format(date);
   }, [i18n.language]);
+
+  useEffect(() => {
+    axios.get(`/api/1.0/hoaxes/${hoax.id}/likecount`).then((response) => {
+      setCountLike(response.data);
+    });
+    axios.get(`/api/1.0/hoaxes/${hoax.id}/dislikecount`).then((response) => {
+      setCountDislike(response.data);
+    });
+    axios.get(`/api/1.0/hoaxes/${hoax.id}/react`).then((response) => {
+      if (response.data === "like") {
+        setLike(true);
+        setDislike(false);
+      }
+      if (response.data === "dislike") {
+        setDislike(true);
+        setLike(false);
+      }
+      if (response.data === "nothing") {
+        setLike(false);
+        setDislike(false);
+      }
+    });
+  });
+
+  const onClickLike = () => {
+    if (!like) {
+      axios.post(`/api/1.0/hoaxes/${hoax.id}/like`);
+      setLike(true);
+      setDislike(false);
+    } else {
+      axios.post(`/api/1.0/hoaxes/${hoax.id}/unlike`);
+      setLike(false);
+    }
+  };
+
+  const onClickDislike = () => {
+    if (!dislike) {
+      axios.post(`/api/1.0/hoaxes/${hoax.id}/dislike`);
+      setDislike(true);
+      setLike(false);
+    } else {
+      axios.post(`/api/1.0/hoaxes/${hoax.id}/undislike`);
+      setDislike(false);
+    }
+  };
 
   return (
     <div className="card p-1 py-2 mb-4">
@@ -86,6 +137,42 @@ const HoaxView = (props) => {
           </audio>
         </div>
       )}
+      <div className="ps-5 mt-2 d-flex text-grey">
+        <div className="col-6 text-center">
+          <button
+            className="p-2 rounded border-0 bg bg-transparent"
+            onClick={onClickLike}
+          >
+            {!like && (
+              <i className="far fa-thumbs-up text-secondary">
+                <span className="ms-2">{countLike > 0 && countLike}</span>
+              </i>
+            )}
+            {like && (
+              <i className="fas fa-thumbs-up text-success">
+                <span className="ms-2">{countLike}</span>
+              </i>
+            )}
+          </button>
+        </div>
+        <div className="col-6 text-center">
+          <button
+            className="p-2 rounded border-0 bg bg-transparent"
+            onClick={onClickDislike}
+          >
+            {!dislike && (
+              <i className="far fa-thumbs-down text-secondary">
+                <span className="ms-2">{countDislike > 0 && countDislike}</span>
+              </i>
+            )}
+            {dislike && (
+              <i className="fas fa-thumbs-down text-danger">
+                <span className="ms-2">{countDislike}</span>
+              </i>
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
