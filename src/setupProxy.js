@@ -1,10 +1,10 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
-  app.use(
+  app.use('/api',
     createProxyMiddleware({
       target: 'https://troke-app.herokuapp.com',
-      changeOrigin: false,
+      changeOrigin: true,
     })
   );
 };
