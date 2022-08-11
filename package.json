@@ -50,5 +50,6 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "cross-env": "^7.0.3"
-  }
+  },
+  "proxy": "https://troke-app.herokuapp.com"
 }
