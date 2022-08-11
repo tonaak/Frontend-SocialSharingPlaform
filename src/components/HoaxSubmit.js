@@ -20,6 +20,14 @@ class HoaxSubmit extends Component {
     attachment: undefined,
   };
 
+  componentDidMount() {
+    this.setState({
+      focused: this.props.focused,
+      content: this.props.content,
+      attachment: this.props.attachment,
+    });
+  }
+
   onChangeContent = (event) => {
     const value = event.target.value;
     this.setState({ content: value, errors: {} });
@@ -32,6 +40,7 @@ class HoaxSubmit extends Component {
     const file = event.target.files[0];
     let reader = new FileReader();
     reader.onloadend = () => {
+      console.log(reader.result);
       let image = undefined;
       let video = undefined;
       let audio = undefined;
@@ -83,24 +92,54 @@ class HoaxSubmit extends Component {
   };
 
   onClickPost = () => {
+    const { isEditMode, hoaxId } = this.props;
     const body = {
       content: this.state.content,
       attachment: this.state.attachment,
       language: i18n.language,
     };
     this.setState({ pendingApiCall: true });
-    apiCalls
-      .postHoax(body)
-      .then((response) => {
-        this.resetState();
-      })
-      .catch((error) => {
-        let errors = {};
-        if (error.response.data && error.response.data.validationErrors) {
-          errors = error.response.data.validationErrors;
-        }
-        this.setState({ pendingApiCall: false, errors });
-      });
+    if (isEditMode) {
+      let bodyUpdated = {
+        content: this.state.content,
+        attachment: this.state.attachment,
+        language: i18n.language,
+      };
+      if (this.state.attachment && !this.state.file) {
+        bodyUpdated = {
+          content: this.state.content,
+          language: i18n.language,
+        };
+      }
+      apiCalls
+        .putHoax(bodyUpdated, hoaxId)
+        .then((response) => {
+          this.props.setContent(this.state.content);
+          this.props.setAttachment(this.state.attachment);
+          this.props.setEditMode(false);
+          this.resetState();
+        })
+        .catch((error) => {
+          let errors = {};
+          if (error.response.data && error.response.data.validationErrors) {
+            errors = error.response.data.validationErrors;
+          }
+          this.setState({ pendingApiCall: false, errors });
+        });
+    } else {
+      apiCalls
+        .postHoax(body)
+        .then((response) => {
+          this.resetState();
+        })
+        .catch((error) => {
+          let errors = {};
+          if (error.response.data && error.response.data.validationErrors) {
+            errors = error.response.data.validationErrors;
+          }
+          this.setState({ pendingApiCall: false, errors });
+        });
+    }
   };
 
   onFocus = () => {
@@ -169,6 +208,12 @@ class HoaxSubmit extends Component {
                     </audio>
                   </div>
                 )}
+                {this.state.attachment && !this.state.file && (
+                  <div className="mt-2">
+                    {this.state.attachment.fileType} <br />
+                    {this.state.attachment.name}
+                  </div>
+                )}
               </div>
               <div className="text-end mt-2">
                 <ButtonWithProgress
@@ -176,11 +221,23 @@ class HoaxSubmit extends Component {
                   className="btn btn-success"
                   onClick={this.onClickPost}
                   pendingApiCall={this.state.pendingApiCall}
-                  text={<Trans i18nKey={"post"} />}
+                  text={
+                    this.props.isEditMode ? (
+                      <Trans i18nKey={"save"} />
+                    ) : (
+                      <Trans i18nKey={"post"} />
+                    )
+                  }
                 />
                 <button
                   className="btn btn-light ms-1"
-                  onClick={this.resetState}
+                  onClick={() => {
+                    if (this.props.isEditMode) {
+                      this.props.setEditMode(false);
+                    } else {
+                      this.resetState();
+                    }
+                  }}
                   disabled={this.state.pendingApiCall}
                 >
                   <i className="fas fa-times" /> {<Trans i18nKey={"cancel"} />}

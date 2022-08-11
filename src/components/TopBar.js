@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/troke-logo.png";
 import { connect } from "react-redux";
@@ -6,6 +6,7 @@ import ProfileImageWithDefault from "./ProfileImageWithDefault";
 import { useTranslation } from "react-i18next";
 import enFlag from "../assets/us_flag.jpg";
 import viFlag from "../assets/vn_flag.png";
+import useClickTracker from "../shared/useClickTracker";
 
 const lngs = {
   en: { nativeName: "English", imgSrc: enFlag },
@@ -13,27 +14,9 @@ const lngs = {
 };
 
 const TopBar = (props) => {
-  const [dropDownVisible, setDropDownVisible] = useState(false);
-  const actionArea = useRef();
   const { t, i18n } = useTranslation();
-
-  useEffect(() => {
-    const onClickTracker = (event) => {
-      if (!actionArea.current) {
-        setDropDownVisible(false);
-        return;
-      }
-      if (dropDownVisible) {
-        setDropDownVisible(false);
-      } else if (actionArea.current.contains(event.target)) {
-        setDropDownVisible(true);
-      }
-    };
-    document.addEventListener("click", onClickTracker);
-    return function cleanup() {
-      document.removeEventListener("click", onClickTracker);
-    };
-  }, [actionArea, dropDownVisible]);
+  const actionArea = useRef();
+  const dropDownVisible = useClickTracker(actionArea);
 
   const onClickLogout = () => {
     const action = {
@@ -76,12 +59,12 @@ const TopBar = (props) => {
             </span>
           </div>
           <div className={dropDownClass}>
-            <Link to={`/${props.user.username}`} className="dropdown-item">
+            <Link to={`/${props.user.username}`} className="dropdown-item py-2">
               <i className="fas fa-user text-info" /> {t("myProfile")}
             </Link>
 
             <span
-              className="dropdown-item"
+              className="dropdown-item py-2"
               onClick={onClickLogout}
               style={{
                 cursor: "pointer",

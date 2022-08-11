@@ -48,6 +48,14 @@ export const postHoax = (hoax) => {
   }
 };
 
+export const putHoax = (hoax, hoaxId) => {
+  if (hoax.language === "vi") {
+    return axios.put(`/api/1.0/hoaxes/${hoaxId}`, hoax, { headers: vi });
+  } else {
+    return axios.put(`/api/1.0/hoaxes/${hoaxId}`, hoax);
+  }
+};
+
 export const loadHoaxes = (username) => {
   const basePath = username
     ? `/api/1.0/users/${username}/hoaxes`
